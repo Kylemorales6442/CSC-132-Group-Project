@@ -1,0 +1,87 @@
+###########################################################################################################################
+# Description: This program implements both a coordinate system class and a 2D point class to randomly plot colored points
+###########################################################################################################################
+from math import sqrt
+from Tkinter import *
+from random import randint
+
+# the 2D point class
+class Point(object):
+	# the constructor
+    def __init__(self, x = 0.0, y = 0.0):
+        # points have x and y-coordinates
+        # they are zero by default
+        self.x = float(x)
+        self.y = float(y)
+
+    # getters and setters for the instance variables
+    @property
+    def x(self):
+        return self._x
+
+    @x.setter
+    def x(self, value):
+        self._x = value
+
+    @property
+    def y(self):
+        return self._y
+
+    @y.setter
+    def y(self, value):
+        self._y = value
+
+    # dist function takes two points as input, calculates and returns the floating point distance between the two points
+    def dist(self, other):
+        return sqrt(pow(self.x - other.x, 2) + pow(self.y - other.y, 2))
+
+    # midpt function takes two points as input, calculates and returns the midpoint between the two points
+    def midpt(self, other):
+        return Point((self.x + other.x) / 2, (self.y + other.y) / 2)
+    # returns the point in the format specified: (x,y)
+    def __str__(self):
+        P = "({},{})".format(self.x, self.y)
+        return P
+
+# the coordinate system class: (0,0) is in the top-left corner
+# inherits from the Canvas class of Tkinter
+# the background is set to white, and n random points are generated
+# the random points are dimensioned, colored, and actually plotted
+# ... by the plot function
+class CoordinateSystem(Canvas):
+    def __init__(self, master):
+        Canvas.__init__(self, master, bg="white")
+        self.pack(fill=BOTH, expand=1)
+
+    def plotPoints(self, n):
+        for i in range(n):
+            x = randint(0, WIDTH - 1)
+            y = randint(0, HEIGHT - 1)
+            self.plot(x, y)
+
+    def plot(self, x, y):
+        color = COLORS[randint(0, len(COLORS) - 1)]
+        self.create_oval(x, y, x + POINT_RADIUS * 2, y + POINT_RADIUS * 2, outline=color)
+
+##########################################################
+# ***DO NOT MODIFY OR REMOVE ANYTHING BELOW THIS POINT!***
+# the default size of the canvas is 400x400
+WIDTH = 400
+HEIGHT = 400
+# the default point radius is 0 pixels (i.e., no center to the oval)
+POINT_RADIUS = 0
+# colors to choose from when plotting points
+COLORS = [ "black", "red", "green", "blue", "cyan", "yellow", "magenta" ]
+# the number of points to plot
+NUM_POINTS = 500
+
+# create the window
+window = Tk()
+window.geometry("{}x{}".format(WIDTH, HEIGHT))
+window.title("2D Points...Plotted")
+# create the coordinate system as a Tkinter canvas inside the window
+s = CoordinateSystem(window)
+# plot some random points
+s.plotPoints(NUM_POINTS)
+# wait for the window to close
+window.mainloop()
