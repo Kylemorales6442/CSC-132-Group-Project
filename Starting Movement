@@ -18,7 +18,7 @@ class Player(object):
             currentBoard[self.y][self.x] = 1
             #regenerate map
             mazeGame.createMap(currentBoard)
-        #check if the spot has a letter on it
+        # check if the spot has a letter on it
         elif(currentBoard[self.y-1][self.x] > 2):
             mazeGame.setStatus(currentBoard[self.y][self.x])
             currentBoard[self.y-1][self.x] = 2
@@ -30,28 +30,28 @@ class Player(object):
         if(currentBoard[y+1][x] == 1):
             currentBoard[y+1][x] = 2
             currentBoard[y][x] = 1
-            #regenerate map
+            # regenerate map
             mazeGame.createMap(currentBoard)
-        #check if the spot has a letter on it
+        # check if the spot has a letter on it
         elif(currentBoard[self.y-1][self.x] > 2):
             mazeGame.setStatus(currentBoard[self.y][self.x])
             currentBoard[self.y-1][self.x] = 2
             currentBoard[self.y][self.x] = 1
-            #regenerate map
+            # regenerate map
             mazeGame.createMap(currentBoard)
 
     def moveLeft(self):
         if(currentBoard[y][x-1] == 1):
             currentBoard[y][x-1] = 2
             currentBoard[y][x] = 1
-            #regenerate map
+            # regenerate map
             mazeGame.createMap(currentBoard)
-        #check if the spot has a letter on it
+        # check if the spot has a letter on it
         elif(currentBoard[self.y-1][self.x] > 2):
             mazeGame.setStatus(currentBoard[self.y][self.x])
             currentBoard[self.y-1][self.x] = 2
             currentBoard[self.y][self.x] = 1
-            #regenerate map
+            # regenerate map
             mazeGame.createMap(currentBoard)
 
     def moveRight(self):
@@ -60,12 +60,12 @@ class Player(object):
             currentBoard[y][x] = 1
             #regenerate map
             mazeGame.createMap(currentBoard)
-        #check if the spot has a letter on it
+        # check if the spot has a letter on it
         elif(currentBoard[self.y-1][self.x] > 2):
             mazeGame.setStatus(currentBoard[self.y][self.x])
             currentBoard[self.y-1][self.x] = 2
             currentBoard[self.y][self.x] = 1
-            #regenerate map
+            # regenerate map
             mazeGame.createMap(currentBoard)
             
 class MazeGame(Canvas):
@@ -113,12 +113,12 @@ class MazeGame(Canvas):
 
     
     def setupGUI(self):
-        #setup the player input at bottom.
+        # setup the player input at bottom
         s.player_input = Entry(self, bg="white")
         #s.player_input.bind("<Return>", self.process)
         s.player_input.pack(side=BOTTOM, fill=X)
 
-        #Set up text on the right of GUI
+        # setup text on the right of GUI
         text_frame = Frame(self, width=TEXTWIDTH)
         MazeGame.text = Text(text_frame, bg="lightgrey", state=DISABLED)
         MazeGame.text.pack(fill=Y, expand=1)
@@ -127,7 +127,7 @@ class MazeGame(Canvas):
 
     # sets the status displayed on the right of the GUI
     def setStatus(self, letter):
-        #enable text widget
+        # enable text widget
         MazeGame.text.config(state=NORMAL)
         MazeGame.text.delete("1.0", END)
         MazeGame.text.insert(END, "Please type in you teams constellation.")
@@ -141,13 +141,13 @@ class MazeGame(Canvas):
 
                 
 
-#Dimentions of window
+# Dimensions of window
 WIDTH = 600
 HEIGHT = 500
 
 TEXTWIDTH = 300
 INPUTHEIGHT = 30
-#Create Maze array
+# Create Maze array
 gameMap = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
            [0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0],
            [0, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 0],
@@ -199,30 +199,30 @@ gameMap = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
            [0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0],
            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]    
 
-#create the window
+# create the window
 window = Tk()
 window.geometry("{}x{}".format(WIDTH + TEXTWIDTH, HEIGHT+ INPUTHEIGHT))
 window.title("Maze Game")
 
-#start game by creating map and hiding letters
+# start game by creating map and hiding letters
 s = MazeGame(window)
 s.hideLetters(gameMap)
 
 window.mainloop()
 
-#initialize the pygame library
+# initialize the pygame library
 pygame.init()
 
-#use boradcom pin mode
+# use boradcom pin mode
 GPIO.setmode(GPIO.BCM)
 
-#setup buttons to be pressed 
+# setup buttons to be pressed 
 up = 26
 left = 6
 down = 12
 right = 20
 
-#setup input pins
+# setup input pins
 GPIO.setup(up, GPIO.IN, GPIO.PUD_DOWN)
 GPIO.setup(left, GPIO.IN, GPIO.PUD_DOWN)
 GPIO.setup(down, GPIO.IN, GPIO.PUD_DOWN)
