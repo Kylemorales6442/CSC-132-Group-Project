@@ -1,7 +1,10 @@
 from Tkinter import *
 from random import randint
 
-words = [["s", "p", "a", "c", "e", "s", "h", "i", "p"], ["m", "o", "o", "n"], ["j", "u", "p", "i", "t", "o", "r"], ["n", "e", "p", "t", "u", "n", "e"], ["v", "e", "n", "u", "s"]]
+constellation = [["phoenix"], ["taurus"], ["canis major"], ["canes vanetici"], ["chameleon"], ["draco"], ["crater"], ["vulpecula"]
+words = [["A", "n", "k", "a", "a"], ["A", "l", "d", "e", "b", "a", "r", "a", "n"], ["C", "e", "r", "b", "e", "r", "u", "s"],\
+["W", "h", "i", "r", "l", "p", "o", "o", "l"], ["B", "a", "y", "e", "r"], ["T", "h", "u", "b", "a", "n"], ["A", "p", "o", "l", "l", "o"],\
+["D", "u", "m", "b", "e", "l", "l"]]
 
 class Player(object):
     def __init__(self, currentBoard, x, y):
@@ -31,7 +34,7 @@ class MazeGame(Canvas):
         self.pack(fill = BOTH, expand=1)
 
     def hideLetters(self, board):
-        chosenWord = words[randint(0, 4)]
+        chosenWord = words[randint(0, 9)]
         finalWord = chosenWord
         print chosenWord
         print chosenWord[0]
@@ -70,13 +73,13 @@ class MazeGame(Canvas):
 
     
     def setupGUI(self):
-        #setup the player input at bottom.
+        # Setup the player input at bottom.
         s.player_input = Entry(self, bg="white")
         #s.player_input.bind("<Return>", self.process)
         s.player_input.pack(side=BOTTOM, fill=X)
         s.player_input.focus()
 
-        #Set up text on the right of GUI
+        # Setup text on the right of GUI
         text_frame = Frame(self, width=TEXTWIDTH)
         MazeGame.text = Text(text_frame, bg="lightgrey", state=DISABLED)
         MazeGame.text.pack(fill=Y, expand=1)
@@ -85,21 +88,21 @@ class MazeGame(Canvas):
 
     # sets the status displayed on the right of the GUI
     def setStatus(self):
-                #enable text widget
+                # enable text widget
                 MazeGame.text.config(state=NORMAL)
                 MazeGame.text.delete("1.0", END)
-                MazeGame.text.insert(END, "Please type in you teams constellation.")
+                MazeGame.text.insert(END, "Please type in the name of your team's constellation.")
                 MazeGame.text.config(state=DISABLED)
 
                 
 
-#Dimentions of window
+# Dimentions of window
 WIDTH = 600
 HEIGHT = 500
 
 TEXTWIDTH = 300
 INPUTHEIGHT = 30
-#Create Maze array
+# Create Maze array
 gameMap = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
            [0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0],
            [0, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 0],
@@ -153,7 +156,7 @@ gameMap = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 
 #create the window
 window = Tk()
-window.geometry("{}x{}".format(WIDTH + TEXTWIDTH, HEIGHT+ INPUTHEIGHT))
+window.geometry("{}x{}".format(WIDTH + TEXTWIDTH, HEIGHT + INPUTHEIGHT))
 window.title("Maze Game")
 
 s = MazeGame(window)
