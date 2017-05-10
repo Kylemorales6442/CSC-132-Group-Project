@@ -74,8 +74,12 @@ class MazeGame(Canvas):
         self.pack(fill = BOTH, expand=1)
 
     def hideLetters(self, board):
+    	# chosenWord needs to be the word corresponding to the .lower() input
+        # of the team's constellation
+        # also, why have "finalWord"? I don't see it used anywhere else
         chosenWord = words[randint(0, 4)]
         finalWord = chosenWord
+	# don't forget to get rid of print operations when finished
         print chosenWord
         print chosenWord[0]
         counter = len(chosenWord) + 2
@@ -130,7 +134,7 @@ class MazeGame(Canvas):
         # enable text widget
         MazeGame.text.config(state=NORMAL)
         MazeGame.text.delete("1.0", END)
-        MazeGame.text.insert(END, "Please type in you teams constellation.")
+        MazeGame.text.insert(END, "Please type in the name of your team's constellation.")
         MazeGame.text.config(state=DISABLED)
         if(letter in chosenWord):
             MazeGame.text.config(state=NORMAL)
@@ -213,7 +217,7 @@ window.mainloop()
 # initialize the pygame library
 pygame.init()
 
-# use boradcom pin mode
+# use broadcom pin mode
 GPIO.setmode(GPIO.BCM)
 
 # setup buttons to be pressed 
