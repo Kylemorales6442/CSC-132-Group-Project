@@ -16,7 +16,7 @@ class Player(object):
         if(currentBoard[self.y-1][self.x] == 1):
             currentBoard[self.y-1][self.x] = 2
             currentBoard[self.y][self.x] = 1
-            #regenerate map
+            # regenerate map
             mazeGame.createMap(currentBoard)
         # check if the spot has a letter on it
         elif(currentBoard[self.y-1][self.x] > 2):
