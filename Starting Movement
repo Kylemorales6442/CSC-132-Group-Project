@@ -4,7 +4,7 @@ import pygame
 from array import array
 import RPi.GPIO as GPIO
 
-words = [["s", "p", "a", "c", "e", "s", "h", "i", "p"], ["m", "o", "o", "n"], ["j", "u", "p", "i", "t", "o", "r"], ["n", "e", "p", "t", "u", "n", "e"], ["v", "e", "n", "u", "s"]]
+words = [["s", "p", "a", "c", "e", "s", "h", "i", "p"], ["m", "o", "o", "n"], ["j", "u", "p", "i", "t", "e", "r"], ["n", "e", "p", "t", "u", "n", "e"], ["v", "e", "n", "u", "s"]]
 
 class Player(object):
     def __init__(self, currentBoard, x, y):
