@@ -1,0 +1,475 @@
+from Tkinter import *
+from random import randint
+import pygame
+from array import array
+import RPi.GPIO as GPIO
+from time import sleep, time
+
+global chosenWord
+global inventory
+global board
+global defaultResponse
+global waitForStart
+global playing
+global final
+global team
+
+class Player(object):
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+    #getters and stters for x and y
+    @property
+    def x(self):
+        return self._x
+
+    @x.setter
+    def x(self, value):
+        self._x = value
+
+    @property
+    def y(self):
+        return self._y
+
+    @y.setter
+    def y(self, value):
+        self._y = value
+            
+class MazeGame(Canvas):
+    def __init__(self, master):
+        Canvas.__init__(self, master)
+        self.pack(fill = BOTH, expand=1)
+
+    def hideLetters(self):
+        global p
+        global chosenWord
+        global board
+        global finalWord
+        global defaultResponse
+
+        for i in chosenWord:
+            finalWord.append(i)
+            
+        counter = len(chosenWord) + 2
+        #print counter
+        while(len(chosenWord) > 0):
+            r = randint(1,36)
+            c = randint(1, 58)
+            if(board[r][c] == 1):
+                board[r][c] = counter
+                del chosenWord[0]
+                counter -= 1
+
+        p = Player(6, 36)
+        playing = True
+        waitForStart = False
+        defaultResponse = "Good Luck!"
+        s.createMap()
+        
+    def createMap(self):
+        global board
+        for row in range(len(board)):
+            height = row*10
+            for col in range(len(board[0])):
+                width = col*10
+                if(board[row][col] == 0):
+                    #create rectangle (x0, y0, x1, y1, fill, outline)
+                    self.create_rectangle(width, height, width+10, height+10, fill="black")
+                elif(board[row][col] == 1):
+                    self.create_rectangle(width, height, width+10, height+10, fill="white") #outline="white")
+                elif(board[row][col] == 2):
+                    self.create_rectangle(width, height, width+10, height+10, fill="red")
+                elif(board[row][col] > 2):
+                    self.create_rectangle(width, height, width+10, height+10, fill="blue")
+
+    def process(self, event):
+        #grab input
+        action = s.player_input.get()
+        action = action.lower()
+
+        #exit if player is done
+        if (action == "quit" or action == "exit"):
+            exit(0)
+
+        #Check for the constelation that was typed
+        if (waitForStart == True):
+            global chosenWord
+            global playing
+            global waitForStart
+            global team
+            global final
+            global defaultResponse
+            
+            if (action == "phoenix"):
+                chosenWord = ["h", "y", "d", "r", "u", "s"]
+                team = "phoenix"
+                question = ""
+                defaultResponse = ""
+                playing = True
+                waitForStart = False
+                s.hideLetters()
+                s.setStatus()
+                
+            elif(action == "taurus"):
+                chosenWord = ["z", "o", "d", "i", "a", "c"]
+                team = "taurus"
+                question = ""
+                defaultResponse = ""
+                playing = True
+                waitForStart = False
+                s.hideLetters()
+                s.setStatus()
+
+            elif(action == "canis major"):
+                chosenWord = ["s", "i", "r", "i", "u", "s"]
+                team = "canis major"
+                question = ""
+                defaultResponse = ""
+                playing = True
+                waitForStart = False
+                s.hideLetters()
+                s.setStatus()
+
+            elif(action == "canes venatici"):
+                chosenWord = ["c", "a", "r", "o", "l", "i"]
+                team = "canes venactici"
+                question = ""
+                defaultResponse = ""
+                playing = True
+                waitForStart = False
+                s.hideLetters()
+                s.setStatus()
+
+            elif(action == "chamealeon"):
+                chosenWord = ["n", "e", "b", "u", "l", "a"]
+                team = "chemealeon"
+                question = ""
+                defaultResponse = ""
+                playing = True
+                waitForStart = False
+                s.hideLetters()
+                s.setStatus
+
+            elif(action == "draco"):
+                chosenWord = ["t", "h", "u", "b", "a", "n"]
+                team = "draco"
+                question = ""
+                defaultResponse = ""
+                playing = True
+                waitForStart = False
+                s.hideLetters()
+                s.setStatus()
+
+            elif(action == "crater"):
+                chosenWord = ["a", "p", "o", "l", "l", "o"]
+                team = "crater"
+                question = ""
+                defaultResponse = ""
+                playing = True
+                waitForStart = False
+                s.hideLetters()
+                s.setStatus()
+
+            elif(action == "vulpecula"):
+                chosenWord = ["d", "u", "m", "b", "e", "l", "l"]
+                team = "vulpecula"
+                question = ""
+                defaultResponse = ""
+                playing = True
+                waitForStart = False
+                s.hideLetters()
+                s.setStatus()
+
+            else:
+                defaultResponse = "Sorry that is not a valid team name, please try again."
+                s.setStatus()
+                
+        elif((playing == True) or (final == True)):
+            if ((action == "hydrus") and (team == "phoenix")):
+                final= False
+                playing = False
+                s.setStatus()
+                
+            elif((action == "zodiac") and (team == "taurus")):
+                final= False
+                playing = False
+                s.setStatus()
+
+            elif((action == "sirius") and (team == "phoenix")):
+                final= False
+                playing = False
+                s.setStatus()
+
+            elif((action == "caroli") and (team == "phoenix")):
+                final= False
+                playing = False
+                s.setStatus()
+
+            elif((action == "nebula") and (team == "phoenix")):
+                final= False
+                playing = False
+                s.setStatus()
+
+            elif((action == "thuban") and (team == "phoenix")):
+                final= False
+                playing = False
+                s.setStatus()
+
+            elif((action == "apollo") and (team == "phoenix")):
+                final= False
+                playing = False
+                s.setStatus()
+
+            elif((action == "dumbell") and (team == "phoenix")):
+                final= False
+                playing = False
+                s.setStatus()
+
+            else:
+                defaultResponse = "Incorrect, please try again."
+                s.setStatus()
+            
+    
+    def setupGUI(self):
+        #setup the player input at bottom.
+        s.player_input = Entry(self, bg="white")
+        s.player_input.bind("<Return>", self.process)
+        s.player_input.pack(side=BOTTOM, fill=X)
+        s.player_input.focus()
+
+        #Set up text on the right of GUI
+        text_frame = Frame(self, width=TEXTWIDTH)
+        s.text = Text(text_frame, bg="lightgrey", state=DISABLED)
+        s.text.pack(fill=Y, expand=1)
+        text_frame.pack(side=RIGHT, fill=Y)
+        text_frame.pack_propagate(False)
+
+    # sets the status displayed on the right of the GUI
+    def setStatus(self):
+        global defaultResponse
+        global playing
+        global final
+
+        #enable text widget
+        if(waitForStart == True):
+            s.text.config(state=NORMAL)
+            s.text.delete("1.0", END)
+            s.text.insert(END, "Please type in you teams constellation.\n\n" +\
+                                defaultResponse)
+            s.text.config(state=DISABLED)
+        elif(playing == True):
+            s.text.config(state=NORMAL)
+            s.text.delete("1.0", END)
+            s.text.insert(END, "Keep searching for letters! This is what you've found.\n"+\
+                                 "Inventory = " + str(inventory) + "\n\n" + defaultResponse)
+            s.text.config(state=DISABLED)
+        elif((len(chosenWord) == len(inventory)) and (playing == True)):
+            playing = False
+            final = True
+            defaultResponse = ""
+            s.setStatus()
+        elif(final == True):
+            s.text.config(state=NORMAL)
+            s.text.delete("1.0", END)
+            s.text.insert(END, question + "\n\n" + "Inventory = " + str(inventory) + "\n\n" + defaultResponse)
+            s.text.config(state=DISABLED)
+        else:
+            s.text.config(state=NORMAL)
+            s.text.delete("1.0", END)
+            s.text.insert(END, "You won! Way to go!")
+            s.text.config(state=DISABLED)
+
+        s.player_input.delete(0, END)
+
+    def moveUp(self):
+        global finalWord
+
+        if(board[p.y-1][p.x] == 1):
+            board[p.y-1][p.x] = 2
+            board[p.y][p.x] = 1
+            p.y = p.y - 1
+            #regenerate map
+            s.createMap()
+        #check if the spot has a letter on it
+        elif(board[p.y-1][p.x] > 2):
+            inventory.append(finalWord[board[p.y-1][p.x]-3])
+            board[p.y-1][p.x] = 2
+            board[p.y][p.x] = 1
+            p.y = p.y - 1
+            #regenerate map
+            s.setStatus()
+            s.createMap()
+
+    def moveDown(self):
+        if(board[p.y+1][p.x] == 1):
+            board[p.y+1][p.x] = 2
+            board[p.y][p.x] = 1
+            p.y= p.y +1
+            #regenerate map
+            s.createMap()
+        #check if the spot has a letter on it
+        elif(board[p.y+1][p.x] > 2):
+            inventory.append(finalWord[board[p.y+1][p.x]-3])
+            board[p.y+1][p.x] = 2
+            board[p.y][p.x] = 1
+            p.y = p.y + 1
+            #regenerate map
+            s.setStatus()
+            s.createMap()
+
+    def moveLeft(self):
+        if(board[p.y][p.x-1] == 1):
+            board[p.y][p.x-1] = 2
+            board[p.y][p.x] = 1
+            #regenerate map
+            p.x = p.x - 1
+            s.createMap()
+        #check if the spot has a letter on it
+        elif(board[p.y][p.x-1] > 2):
+            inventory.append(finalWord[board[p.y][p.x-1]-3])
+            board[p.y][p.x-1] = 2
+            board[p.y][p.x] = 1
+            p.x = p.x - 1
+            #regenerate map
+            s.setStatus()
+            s.createMap()
+
+    def moveRight(self):
+        if(board[p.y][p.x+1] == 1):
+            board[p.y][p.x+1] = 2
+            board[p.y][p.x] = 1
+            p.x = p.x + 1
+            #regenerate map
+            s.createMap()
+        #check if the spot has a letter on it
+        elif(board[p.y][p.x+1] > 2):
+            inventory.append(finalWord[board[p.y][p.x+1]-3])
+            board[p.y][p.x+1] = 2
+            board[p.y][p.x] = 1
+            p.x = p.x + 1
+            #regenerate map
+            s.setStatus()
+            s.createMap()
+
+
+#Dimentions of window
+WIDTH = 600
+HEIGHT = 380
+
+TEXTWIDTH = 150
+INPUTHEIGHT = 30
+#Create Maze array
+board = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+           [0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0],
+           [0, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 0],
+           [0, 1, 1, 1, 0, 1, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0],
+           [0, 1, 0, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0],
+           [0, 1, 0, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0],
+           [0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0],
+           [0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0],
+           [0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1, 0, 1, 1, 1, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 1, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1, 0],
+           [0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 1, 1, 0],
+           [0, 0, 1, 1, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 0, 0, 1, 1, 0, 0, 1, 0, 1, 0],
+           [0, 0, 1, 0, 0, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0],
+           [0, 0, 1, 0, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0],
+           [0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0],
+           [0, 0, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0],
+           [0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0],
+           [0, 0, 1, 0, 1, 0, 0, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0],
+           [0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0],
+           [0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 0],
+           [0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 1, 0],
+           [0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 1, 1, 0, 0, 0, 1, 0, 1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0],
+           [0, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0],
+           [0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 1, 0, 1, 0],
+           [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0],
+           [0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1, 0],
+           [0, 1, 1, 1, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0],
+           [0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0],
+           [0, 1, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0],
+           [0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 1, 0],
+           [0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 1, 1, 1, 1, 0, 0, 1, 0],
+           [0, 0, 1, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0],
+           [0, 1, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0],
+           [0, 1, 0, 0, 0, 1, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+           [0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0],
+           [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0],
+           [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0],
+           [0, 1, 1, 1, 1, 1, 2, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+           [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
+           
+#create the window
+window = Tk()
+window.geometry("{}x{}".format(WIDTH + TEXTWIDTH, HEIGHT+ INPUTHEIGHT))
+window.title("Maze Game")
+
+#initialize variables
+finalWord = []
+inventory = []
+waitForStart = True
+playing = False
+final = False
+team  = " "
+defaultResponse = " "
+
+#start game by creating map and hiding letters
+s = MazeGame(window)
+s.createMap()
+s.setupGUI()
+s.setStatus()
+               
+#initialize the pygame library
+pygame.init()
+
+#use broadcom pin mode
+GPIO.setmode(GPIO.BCM)
+
+#setup buttons to be pressed 
+up = 17
+left = 27
+down = 6
+right = 19
+
+#setup input pins
+GPIO.setup(up, GPIO.IN, GPIO.PUD_DOWN)
+GPIO.setup(left, GPIO.IN, GPIO.PUD_DOWN)
+GPIO.setup(down, GPIO.IN, GPIO.PUD_DOWN)
+GPIO.setup(right, GPIO.IN, GPIO.PUD_DOWN)
+
+
+# detect when Ctrl+C is pressed so that we can reset the GPIO pins
+try:
+    while (True):
+        
+        window.update_idletasks()
+        window. update()
+
+        # if the up button was pressed
+        if (GPIO.input(up)):
+            while(GPIO.input(up)):
+                sleep(0.01)
+            s.moveUp()
+        # if the down button was pressed
+        elif (GPIO.input(down)):
+            while(GPIO.input(down)):
+                sleep(0.01)
+            s.moveDown()
+        #If left button was pressed
+        elif (GPIO.input(left)):
+            while(GPIO.input(left)):
+                sleep(0.01)
+            s.moveLeft()
+        #If right button was pressed
+        elif (GPIO.input(right)):
+            while(GPIO.input(right)):
+                sleep(0.01)
+            s.moveRight()
+        # otherwise, pass
+        else:
+            pass
+        
+        s.player_input.focus()
+except KeyboardInterrupt:
+    # reset the GPIO pins
+    GPIO.cleanup()
