@@ -1,3 +1,11 @@
+###################################################################################################################################
+# Names: Joseph Bingham, Kyle Morales, Jared Johnson
+# Date: 5/11/17
+# Description: For our final Computer Science project we have created a maze using a GUI. The team would input their team name,
+#              and they would be assigned a unique passcode for their team. The letters of this passcode is randomly distributed
+# throughout the maze. The team's challenge is to find all of their letters. When they do so, they are then asked to unscramble
+# their passcode when given a hint about the passcode. Each passcode is a trivial fact relating to each individual constellation
+###################################################################################################################################
 from Tkinter import *
 from random import randint
 import pygame
@@ -14,12 +22,13 @@ global playing
 global final
 global team
 
+# The Player class is used to help us keep track programmatically of the player (red square)
 class Player(object):
     def __init__(self, x, y):
         self.x = x
         self.y = y
 
-    #getters and stters for x and y
+    # getters and setters for x and y
     @property
     def x(self):
         return self._x
@@ -41,6 +50,8 @@ class MazeGame(Canvas):
         Canvas.__init__(self, master)
         self.pack(fill = BOTH, expand=1)
 
+    # this function hides the letters by using a counter, randomly distributing letters in the maze
+    # until the entire word is distributed
     def hideLetters(self):
         global p
         global chosenWord
@@ -52,7 +63,6 @@ class MazeGame(Canvas):
             finalWord.append(i)
             
         counter = len(chosenWord) + 2
-        #print counter
         while(len(chosenWord) > 0):
             r = randint(1,36)
             c = randint(1, 58)
@@ -61,12 +71,16 @@ class MazeGame(Canvas):
                 del chosenWord[0]
                 counter -= 1
 
+        # The player's position is initialized, and the game begins
         p = Player(6, 36)
         playing = True
         waitForStart = False
         defaultResponse = "Good Luck!"
         s.createMap()
-        
+    
+    # the maze is created using the maze array "board" (all the 1s and 0s)
+    # every 0 is a black square, every 1 a white square that the player can move to.
+    # letters are stored randomly throughout the maze as a value greater than 2
     def createMap(self):
         global board
         for row in range(len(board)):
@@ -82,17 +96,19 @@ class MazeGame(Canvas):
                     self.create_rectangle(width, height, width+10, height+10, fill="red")
                 elif(board[row][col] > 2):
                     self.create_rectangle(width, height, width+10, height+10, fill="blue")
-
+    
     def process(self, event):
-        #grab input
+        # wait for player to input their constellation name
         action = s.player_input.get()
         action = action.lower()
 
-        #exit if player is done
+        # exit if player is done
         if (action == "quit" or action == "exit"):
             exit(0)
 
-        #Check for the constelation that was typed
+        # Check for the constelation that was typed
+        # if the input matches a proper team name, proceed with the game:
+        # distributing letters and setting the status
         if (waitForStart == True):
             global chosenWord
             global playing
@@ -104,7 +120,7 @@ class MazeGame(Canvas):
             if (action == "phoenix"):
                 chosenWord = ["h", "y", "d", "r", "u", "s"]
                 team = "phoenix"
-                question = ""
+                question = "This constellation's nearest neighbor is this constellation, whose name means 'male water snake'."
                 defaultResponse = ""
                 playing = True
                 waitForStart = False
@@ -114,7 +130,7 @@ class MazeGame(Canvas):
             elif(action == "taurus"):
                 chosenWord = ["z", "o", "d", "i", "a", "c"]
                 team = "taurus"
-                question = ""
+                question = "This constellation is one of the constellations of the ______, meaning it is crossed by the plane of the ecliptic."
                 defaultResponse = ""
                 playing = True
                 waitForStart = False
@@ -124,7 +140,7 @@ class MazeGame(Canvas):
             elif(action == "canis major"):
                 chosenWord = ["s", "i", "r", "i", "u", "s"]
                 team = "canis major"
-                question = ""
+                question = "Canis Majoris, Latin for "greater dog", contains this brightest star in the night sky, also fittingly known as the 'dog star'"
                 defaultResponse = ""
                 playing = True
                 waitForStart = False
@@ -134,7 +150,7 @@ class MazeGame(Canvas):
             elif(action == "canes venatici"):
                 chosenWord = ["c", "a", "r", "o", "l", "i"]
                 team = "canes venactici"
-                question = ""
+                question = "Named by the physician to Charles II of England, Cor ________  (meaning Charles' Heart) is the brightest star of the constellation."
                 defaultResponse = ""
                 playing = True
                 waitForStart = False
@@ -144,7 +160,7 @@ class MazeGame(Canvas):
             elif(action == "chamealeon"):
                 chosenWord = ["n", "e", "b", "u", "l", "a"]
                 team = "chemealeon"
-                question = ""
+                question = "NGC 3195, which lies inside Chamaeleon, is the southernmost of all the bright planetary _____ (Latin for 'fog' or 'mist') in the sky."
                 defaultResponse = ""
                 playing = True
                 waitForStart = False
@@ -154,7 +170,7 @@ class MazeGame(Canvas):
             elif(action == "draco"):
                 chosenWord = ["t", "h", "u", "b", "a", "n"]
                 team = "draco"
-                question = ""
+                question = "The star now called Alpha Draconis was once called this, meaning 'head of the serpent'."
                 defaultResponse = ""
                 playing = True
                 waitForStart = False
@@ -164,7 +180,7 @@ class MazeGame(Canvas):
             elif(action == "crater"):
                 chosenWord = ["a", "p", "o", "l", "l", "o"]
                 team = "crater"
-                question = ""
+                question = "In an old myth explaining the constellation's meaning, a crow would fly a cup of water ('Crater') to this Greek god."
                 defaultResponse = ""
                 playing = True
                 waitForStart = False
@@ -174,7 +190,7 @@ class MazeGame(Canvas):
             elif(action == "vulpecula"):
                 chosenWord = ["d", "u", "m", "b", "e", "l", "l"]
                 team = "vulpecula"
-                question = ""
+                question = "This large, bright planetary nebula was discovered as the very first object of its kind. Also known as M27, this nebula has a double-lobed shape, similar to that of an hourglass."
                 defaultResponse = ""
                 playing = True
                 waitForStart = False
@@ -184,45 +200,46 @@ class MazeGame(Canvas):
             else:
                 defaultResponse = "Sorry that is not a valid team name, please try again."
                 s.setStatus()
-                
+        
+        # if the team correctly guesses the passcode, end the game and set the status
         elif((playing == True) or (final == True)):
             if ((action == "hydrus") and (team == "phoenix")):
-                final= False
+                final = False
                 playing = False
                 s.setStatus()
                 
             elif((action == "zodiac") and (team == "taurus")):
-                final= False
+                final = False
                 playing = False
                 s.setStatus()
 
-            elif((action == "sirius") and (team == "phoenix")):
-                final= False
+            elif((action == "sirius") and (team == "canis major")):
+                final = False
                 playing = False
                 s.setStatus()
 
-            elif((action == "caroli") and (team == "phoenix")):
-                final= False
+            elif((action == "caroli") and (team == "canes venatici")):
+                final = False
                 playing = False
                 s.setStatus()
 
-            elif((action == "nebula") and (team == "phoenix")):
-                final= False
+            elif((action == "nebula") and (team == "chamaeleon")):
+                final = False
                 playing = False
                 s.setStatus()
 
-            elif((action == "thuban") and (team == "phoenix")):
-                final= False
+            elif((action == "thuban") and (team == "draco")):
+                final = False
                 playing = False
                 s.setStatus()
 
-            elif((action == "apollo") and (team == "phoenix")):
-                final= False
+            elif((action == "apollo") and (team == "crater")):
+                final = False
                 playing = False
                 s.setStatus()
 
-            elif((action == "dumbell") and (team == "phoenix")):
-                final= False
+            elif((action == "dumbell") and (team == "vulpecula")):
+                final = False
                 playing = False
                 s.setStatus()
 
@@ -232,13 +249,13 @@ class MazeGame(Canvas):
             
     
     def setupGUI(self):
-        #setup the player input at bottom.
+        # setup the player input at bottom
         s.player_input = Entry(self, bg="white")
         s.player_input.bind("<Return>", self.process)
         s.player_input.pack(side=BOTTOM, fill=X)
         s.player_input.focus()
 
-        #Set up text on the right of GUI
+        # setup text on the right of GUI
         text_frame = Frame(self, width=TEXTWIDTH)
         s.text = Text(text_frame, bg="lightgrey", state=DISABLED)
         s.text.pack(fill=Y, expand=1)
@@ -251,17 +268,17 @@ class MazeGame(Canvas):
         global playing
         global final
 
-        #enable text widget
+        # enable text widget
         if(waitForStart == True):
             s.text.config(state=NORMAL)
             s.text.delete("1.0", END)
-            s.text.insert(END, "Please type in you teams constellation.\n\n" +\
+            s.text.insert(END, "Please type in the name of your team's constellation.\n\n" +\
                                 defaultResponse)
             s.text.config(state=DISABLED)
         elif(playing == True):
             s.text.config(state=NORMAL)
             s.text.delete("1.0", END)
-            s.text.insert(END, "Keep searching for letters! This is what you've found.\n"+\
+            s.text.insert(END, "Keep searching for letters! This is what you've found:\n"+\
                                  "Inventory = " + str(inventory) + "\n\n" + defaultResponse)
             s.text.config(state=DISABLED)
         elif((len(chosenWord) == len(inventory)) and (playing == True)):
@@ -272,7 +289,8 @@ class MazeGame(Canvas):
         elif(final == True):
             s.text.config(state=NORMAL)
             s.text.delete("1.0", END)
-            s.text.insert(END, question + "\n\n" + "Inventory = " + str(inventory) + "\n\n" + defaultResponse)
+            s.text.insert(END, "Congratulations! You've found all the letters. Now you must unscramble them to find the answer to the following question:\n\n"+\
+                                 question + "\n\n" + "Inventory = " + str(inventory) + "\n\n" + defaultResponse)
             s.text.config(state=DISABLED)
         else:
             s.text.config(state=NORMAL)
@@ -282,6 +300,10 @@ class MazeGame(Canvas):
 
         s.player_input.delete(0, END)
 
+    # these functions detect if the player can move a certain direction (only to white squares (1s, not 0s))
+    # if it can move that direction, the player moves that direction by swapping its value in the array (2) for
+    # the square he/she intends to move to (1). If the player passes over a square containing a letter, add that 
+    # letter to the inventoryThe map is then regenerated to display the movement. 
     def moveUp(self):
         global finalWord
 
@@ -289,15 +311,12 @@ class MazeGame(Canvas):
             board[p.y-1][p.x] = 2
             board[p.y][p.x] = 1
             p.y = p.y - 1
-            #regenerate map
             s.createMap()
-        #check if the spot has a letter on it
         elif(board[p.y-1][p.x] > 2):
             inventory.append(finalWord[board[p.y-1][p.x]-3])
             board[p.y-1][p.x] = 2
             board[p.y][p.x] = 1
             p.y = p.y - 1
-            #regenerate map
             s.setStatus()
             s.createMap()
 
@@ -305,16 +324,13 @@ class MazeGame(Canvas):
         if(board[p.y+1][p.x] == 1):
             board[p.y+1][p.x] = 2
             board[p.y][p.x] = 1
-            p.y= p.y +1
-            #regenerate map
+            p.y= p.y + 1
             s.createMap()
-        #check if the spot has a letter on it
         elif(board[p.y+1][p.x] > 2):
             inventory.append(finalWord[board[p.y+1][p.x]-3])
             board[p.y+1][p.x] = 2
             board[p.y][p.x] = 1
             p.y = p.y + 1
-            #regenerate map
             s.setStatus()
             s.createMap()
 
@@ -322,16 +338,13 @@ class MazeGame(Canvas):
         if(board[p.y][p.x-1] == 1):
             board[p.y][p.x-1] = 2
             board[p.y][p.x] = 1
-            #regenerate map
             p.x = p.x - 1
             s.createMap()
-        #check if the spot has a letter on it
         elif(board[p.y][p.x-1] > 2):
             inventory.append(finalWord[board[p.y][p.x-1]-3])
             board[p.y][p.x-1] = 2
             board[p.y][p.x] = 1
             p.x = p.x - 1
-            #regenerate map
             s.setStatus()
             s.createMap()
 
@@ -340,26 +353,23 @@ class MazeGame(Canvas):
             board[p.y][p.x+1] = 2
             board[p.y][p.x] = 1
             p.x = p.x + 1
-            #regenerate map
             s.createMap()
-        #check if the spot has a letter on it
         elif(board[p.y][p.x+1] > 2):
             inventory.append(finalWord[board[p.y][p.x+1]-3])
             board[p.y][p.x+1] = 2
             board[p.y][p.x] = 1
             p.x = p.x + 1
-            #regenerate map
             s.setStatus()
             s.createMap()
 
 
-#Dimentions of window
+# Dimensions of window
 WIDTH = 600
 HEIGHT = 380
 
 TEXTWIDTH = 150
 INPUTHEIGHT = 30
-#Create Maze array
+# Create maze array
 board = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
            [0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0],
            [0, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 0],
@@ -399,12 +409,12 @@ board = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
            [0, 1, 1, 1, 1, 1, 2, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
            
-#create the window
+# create the window
 window = Tk()
 window.geometry("{}x{}".format(WIDTH + TEXTWIDTH, HEIGHT+ INPUTHEIGHT))
 window.title("Maze Game")
 
-#initialize variables
+# initialize variables
 finalWord = []
 inventory = []
 waitForStart = True
@@ -413,25 +423,27 @@ final = False
 team  = " "
 defaultResponse = " "
 
-#start game by creating map and hiding letters
+# start game by creating map and hiding letters
+# setStatus is used to move between portions of the game
+# (i.e. waitForStart, playing, final)
 s = MazeGame(window)
 s.createMap()
 s.setupGUI()
 s.setStatus()
                
-#initialize the pygame library
+# initialize the pygame library
 pygame.init()
 
-#use broadcom pin mode
+# use broadcom pin mode
 GPIO.setmode(GPIO.BCM)
 
-#setup buttons to be pressed 
+# setup buttons to be pressed 
 up = 17
 left = 27
 down = 6
 right = 19
 
-#setup input pins
+# setup input pins
 GPIO.setup(up, GPIO.IN, GPIO.PUD_DOWN)
 GPIO.setup(left, GPIO.IN, GPIO.PUD_DOWN)
 GPIO.setup(down, GPIO.IN, GPIO.PUD_DOWN)
@@ -445,22 +457,22 @@ try:
         window.update_idletasks()
         window. update()
 
-        # if the up button was pressed
+        # if the up button was pressed, access the moveUp function
         if (GPIO.input(up)):
             while(GPIO.input(up)):
                 sleep(0.01)
             s.moveUp()
-        # if the down button was pressed
+        # if the down button was pressed, access the moveDown function
         elif (GPIO.input(down)):
             while(GPIO.input(down)):
                 sleep(0.01)
             s.moveDown()
-        #If left button was pressed
+        # if left button was pressed, access the moveLeft function
         elif (GPIO.input(left)):
             while(GPIO.input(left)):
                 sleep(0.01)
             s.moveLeft()
-        #If right button was pressed
+        # if right button was pressed, access the moveRight function
         elif (GPIO.input(right)):
             while(GPIO.input(right)):
                 sleep(0.01)
